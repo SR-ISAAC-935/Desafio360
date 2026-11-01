@@ -1,27 +1,27 @@
 -- ===== 000_CrearBaseDatos.sql =====
 -- 000_CrearBaseDatos.sql
--- Crea la base de datos de ShopCart desde cero.
+-- Crea la base de datos de CarritoVenta desde cero.
 --
 -- ATENCIÓN: si la base ya existe se ELIMINA con todos sus datos. Cambie el nombre si su base
--- se llama distinto. Ejecutar conectado a la base "master" (o a cualquiera distinta de ShopCart).
+-- se llama distinto. Ejecutar conectado a la base "master" (o a cualquiera distinta de CarritoVenta).
 --
 -- Orden de ejecución de los scripts:
---   000_CrearBaseDatos.sql  ->  USE ShopCart  ->  001 ... 012  ->  013_Pruebas.sql (opcional)
+--   000_CrearBaseDatos.sql  ->  USE CarritoVenta  ->  001 ... 012  ->  013_Pruebas.sql (opcional)
 
 USE master;
 GO
 
-IF DB_ID(N'ShopCart') IS NOT NULL
+IF DB_ID(N'CarritoVenta') IS NOT NULL
 BEGIN
-    ALTER DATABASE ShopCart SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE ShopCart;
+    ALTER DATABASE CarritoVenta SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE CarritoVenta;
 END;
 GO
 
-CREATE DATABASE ShopCart;
+CREATE DATABASE CarritoVenta;
 GO
 
-USE ShopCart;
+USE CarritoVenta;
 GO
 
 GO
@@ -578,16 +578,16 @@ GO
 INSERT INTO Usuarios (Email, NombreCompleto, PasswordHash, IDRol)
 SELECT v.Email, v.Nombre, '$2b$10$Ailom9WojMktAMpW1OrMnOGqU3mOCvD1eypu/FH.U6voXEjmNLaNO', r.IDRol
 FROM (VALUES
-    (N'admin@shopcart.test',    N'Administrador ShopCart', N'Administrador'),
-    (N'operador@shopcart.test', N'Operador ShopCart',      N'Operador'),
-    (N'cliente@shopcart.test',  N'Cliente de Prueba',      N'Cliente')
+    (N'admin@CarritoVenta.test',    N'Administrador CarritoVenta', N'Administrador'),
+    (N'operador@CarritoVenta.test', N'Operador CarritoVenta',      N'Operador'),
+    (N'cliente@CarritoVenta.test',  N'Cliente de Prueba',      N'Cliente')
 ) AS v (Email, Nombre, Rol)
 JOIN Roles r ON r.NombreRol = v.Rol;
 GO
 
 INSERT INTO Direcciones (IDUsuario, Direccion, Zona, Municipio, Departamento, Referencia)
 SELECT IDUsuario, N'5a avenida 10-20', N'1', N'Guatemala', N'Guatemala', N'Casa blanca, portón negro'
-FROM Usuarios WHERE Email = N'cliente@shopcart.test';
+FROM Usuarios WHERE Email = N'cliente@CarritoVenta.test';
 GO
 
 -- Categorías
@@ -645,7 +645,7 @@ GO
 -- Kardex: entrada inicial por cada variante, así existencia = suma del kardex
 INSERT INTO MovimientosInventario (IDVariante, IDUsuario, TipoMovimiento, Cantidad, ExistenciaResultante, Motivo)
 SELECT v.IDVariante,
-       (SELECT IDUsuario FROM Usuarios WHERE Email = N'admin@shopcart.test'),
+       (SELECT IDUsuario FROM Usuarios WHERE Email = N'admin@CarritoVenta.test'),
        'ENTRADA', v.ExistenciaFisica, v.ExistenciaFisica, N'Inventario inicial'
 FROM VariantesProducto v
 WHERE v.ExistenciaFisica > 0;
