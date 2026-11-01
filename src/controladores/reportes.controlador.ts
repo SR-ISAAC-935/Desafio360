@@ -6,7 +6,7 @@ import {
   topProductosQuerySchema,
   ventasQuerySchema,
 } from '../schemas/reportes.schemas';
-import * as servicio from '../servicios/reportes.servicio';
+import * as servicio from '../Services/reportes.servicio';
 import { armarPagina } from '../utils/paginacion';
 import { usuarioDe } from '../utils/solicitud';
 

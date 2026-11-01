@@ -12,6 +12,7 @@ import { rutasInventario } from './inventario';
 import { rutasProductos, rutasVariantes } from './productos';
 import { rutasReportes } from './reportes';
 import { rutasUsuarios } from './usuarios';
+import { exigirRol } from '../middlewares/autenticacion';
 
 export const rutas = Router();
 
@@ -32,14 +33,14 @@ rutas.use('/direcciones', rutasDirecciones);
 // TODO (pendiente): carrito, checkout y pedidos del cliente
 
 // Operador y Administrador
-rutas.use('/inventario', rutasInventario);
+rutas.use('/inventario',exigirRol('Administrador'), rutasInventario);
 // TODO (pendiente): pedidos del personal (listar, avanzar estado, devoluciones)
 
 // Administrador
-rutas.use('/usuarios', rutasUsuarios);
-rutas.use('/categorias', rutasCategorias);
-rutas.use('/productos', rutasProductos);
-rutas.use('/variantes', rutasVariantes);
-rutas.use('/cupones', rutasCupones);
-rutas.use('/reportes', rutasReportes);
-rutas.use('/bitacora', rutasBitacora);
+rutas.use('/usuarios' ,exigirRol('Administrador'), rutasUsuarios);
+rutas.use('/categorias' ,exigirRol('Administrador'), rutasCategorias);
+rutas.use('/productos' ,exigirRol('Administrador'), rutasProductos);
+rutas.use('/variantes' ,exigirRol('Administrador'), rutasVariantes);
+rutas.use('/cupones' ,exigirRol('Administrador'), rutasCupones);
+rutas.use('/reportes' ,exigirRol('Administrador'), rutasReportes);
+rutas.use('/bitacora' ,exigirRol('Administrador'), rutasBitacora);

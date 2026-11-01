@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { inicioSesionSchema, refreshTokenSchema, registroSchema } from '../schemas/auth.schemas';
-import * as servicio from '../servicios/auth.servicio';
+import * as servicio from '../Services/auth.servicio';
 
 export async function registro(req: Request, res: Response): Promise<void> {
   const usuario = await servicio.registrarUsuario(registroSchema.parse(req.body));

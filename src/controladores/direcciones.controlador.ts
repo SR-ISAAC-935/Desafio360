@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { idParamSchema } from '../schemas/comunes.schemas';
 import { crearDireccionSchema } from '../schemas/direcciones.schemas';
-import * as servicio from '../servicios/direcciones.servicio';
+import * as servicio from '../Services/direcciones.servicio';
 import { usuarioDe } from '../utils/solicitud';
 
 export async function listar(req: Request, res: Response): Promise<void> {

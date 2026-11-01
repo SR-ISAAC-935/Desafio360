@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { idParamSchema } from '../schemas/comunes.schemas';
 import { cambiarEstadoUsuarioSchema, crearUsuarioSchema, listarUsuariosQuerySchema } from '../schemas/usuarios.schemas';
-import * as servicio from '../servicios/usuarios.servicio';
+import * as servicio from '../Services/usuarios.servicio';
 import { armarPagina } from '../utils/paginacion';
 import { usuarioDe } from '../utils/solicitud';
 

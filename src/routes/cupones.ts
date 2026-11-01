@@ -6,6 +6,6 @@ export const rutasCupones = Router();
 
 rutasCupones.use(autenticar, exigirRol('Administrador'));
 
-rutasCupones.get('/', listar);
-rutasCupones.post('/', crear);
-rutasCupones.put('/:id', actualizar);
+rutasCupones.get('/ver-cupones', listar);
+rutasCupones.post('/crearCupones',exigirRol('Administrador'), crear);
+rutasCupones.put('/:id',exigirRol('Administrador'), actualizar);

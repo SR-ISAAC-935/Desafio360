@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { bitacoraQuerySchema } from '../schemas/bitacora.schemas';
-import * as servicio from '../servicios/bitacora.servicio';
+import * as servicio from '../Services/bitacora.servicio';
 import { armarPagina } from '../utils/paginacion';
 import { usuarioDe } from '../utils/solicitud';
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ROLES } from '../servicios/tokens.servicio';
+import { ROLES } from '../Services/tokens.servicio';
 import { emailSchema, passwordNuevaSchema } from './auth.schemas';
 import { booleanoQuery, paginacionSchema } from './comunes.schemas';
 

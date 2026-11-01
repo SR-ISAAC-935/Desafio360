@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { buscarCatalogoQuerySchema } from '../schemas/catalogo.schemas';
 import { idParamSchema } from '../schemas/comunes.schemas';
-import * as servicio from '../servicios/catalogo.servicio';
+import * as servicio from '../Services/catalogo.servicio';
 import { armarPagina } from '../utils/paginacion';
 
 export async function categorias(_req: Request, res: Response): Promise<void> {

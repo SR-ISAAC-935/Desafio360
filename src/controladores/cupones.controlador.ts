@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { idParamSchema } from '../schemas/comunes.schemas';
 import { actualizarCuponSchema, crearCuponSchema, listarCuponesQuerySchema } from '../schemas/cupones.schemas';
-import * as servicio from '../servicios/cupones.servicio';
+import * as servicio from '../Services/cupones.servicio';
 import { armarPagina } from '../utils/paginacion';
 import { usuarioDe } from '../utils/solicitud';
 

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { idParamSchema } from '../schemas/comunes.schemas';
 import { ajusteSchema, entradasSchema, existenciasQuerySchema, kardexQuerySchema } from '../schemas/inventario.schemas';
-import * as servicio from '../servicios/inventario.servicio';
+import * as servicio from '../Services/inventario.servicio';
 import { armarPagina } from '../utils/paginacion';
 import { usuarioDe } from '../utils/solicitud';
 

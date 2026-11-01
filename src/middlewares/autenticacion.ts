@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
 import { AppError } from '../errors/AppError';
-import { verificarAccessToken, type RolNombre } from '../servicios/tokens.servicio';
+import { verificarAccessToken, type RolNombre } from '../Services/tokens.servicio';
 
 /**
  * Exige un access token válido en la cabecera "Authorization: Bearer <token>".

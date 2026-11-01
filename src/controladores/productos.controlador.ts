@@ -7,8 +7,8 @@ import {
   crearProductoSchema,
   varianteNuevaSchema,
 } from '../schemas/productos.schemas';
-import { obtenerProducto } from '../servicios/catalogo.servicio';
-import * as servicio from '../servicios/productos.servicio';
+import { obtenerProducto } from '../Services/catalogo.servicio';
+import * as servicio from '../Services/productos.servicio';
 import { usuarioDe } from '../utils/solicitud';
 
 /** Para el backoffice: devuelve el producto aunque esté inactivo. */
