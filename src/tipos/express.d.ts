@@ -1,4 +1,4 @@
-import type { UsuarioAutenticado } from '../servicios/tokens.servicio';
+import type { UsuarioAutenticado } from '../Services/tokens.servicio';
 
 // Agrega req.usuario a los tipos de Express (lo llena el middleware "autenticar")
 declare global {
