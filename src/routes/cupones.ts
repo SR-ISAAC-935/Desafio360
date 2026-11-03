@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { actualizar, crear, listar } from '../controladores/cupones.controlador';
+import { actualizar, crear, listar } from '../Controllers/cupones.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 export const rutasCupones = Router();
 
 rutasCupones.use(autenticar, exigirRol('Administrador'));
 
-rutasCupones.get('/ver-cupones', listar);
-rutasCupones.post('/crearCupones',exigirRol('Administrador'), crear);
-rutasCupones.put('/:id',exigirRol('Administrador'), actualizar);
+rutasCupones.get('/', listar);
+rutasCupones.post('/', crear);
+rutasCupones.put('/:id', actualizar);

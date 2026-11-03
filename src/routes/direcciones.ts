@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { crear, desactivar, listar } from '../controladores/direcciones.controlador';
+import { crear, desactivar, listar } from '../Controllers/direcciones.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 export const rutasDirecciones = Router();
