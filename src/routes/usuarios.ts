@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { cambiarEstado, crear, listar } from '../controladores/usuarios.controlador';
+import { cambiarEstado, crear, listar } from '../Controllers/usuarios.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 export const rutasUsuarios = Router();

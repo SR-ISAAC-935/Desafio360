@@ -75,3 +75,11 @@ export async function renovarSesion(refreshToken: string, ip?: string): Promise<
 export async function cerrarSesion(refreshToken: string): Promise<void> {
   await ejecutarSP('SP_Auth_RevocarRefreshToken', [P.char('TokenHash', 64, hashearToken(refreshToken))]);
 }
+
+/** Perfil del usuario con sesión (el id sale del token). */
+export async function obtenerPerfil(idUsuario: number): Promise<UsuarioPublico> {
+  const resultado = await ejecutarSP('SP_Auth_ObtenerUsuarioPorID', [P.int('IDUsuario', idUsuario)]);
+  const usuario = resultado.primera<UsuarioPublico>();
+  if (!usuario) throw new AppError(404, 'USUARIO_NO_ENCONTRADO', 'El usuario no existe.');
+  return usuario;
+}

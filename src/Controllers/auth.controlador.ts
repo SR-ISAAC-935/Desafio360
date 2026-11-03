@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { inicioSesionSchema, refreshTokenSchema, registroSchema } from '../schemas/auth.schemas';
 import * as servicio from '../Services/auth.servicio';
+import { usuarioDe } from '../utils/solicitud';
 
 export async function registro(req: Request, res: Response): Promise<void> {
   const usuario = await servicio.registrarUsuario(registroSchema.parse(req.body));
@@ -21,4 +22,8 @@ export async function logout(req: Request, res: Response): Promise<void> {
   const { refreshToken } = refreshTokenSchema.parse(req.body);
   await servicio.cerrarSesion(refreshToken);
   res.status(204).send();
+}
+
+export async function yo(req: Request, res: Response): Promise<void> {
+  res.json({ usuario: await servicio.obtenerPerfil(usuarioDe(req).id) });
 }
