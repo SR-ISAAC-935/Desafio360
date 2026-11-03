@@ -4,15 +4,17 @@ import { P } from '../db/parametros';
 import { ejecutarSP } from '../db/ejecutarSP';
 import { rutasAuth } from './auth';
 import { rutasBitacora } from './bitacora';
+import { rutasCarrito } from './carrito';
 import { rutasCatalogo } from './catalogo';
 import { rutasCategorias } from './categorias';
+import { rutasCheckout } from './checkout';
 import { rutasCupones } from './cupones';
 import { rutasDirecciones } from './direcciones';
 import { rutasInventario } from './inventario';
+import { rutasPedidos } from './pedidos';
 import { rutasProductos, rutasVariantes } from './productos';
 import { rutasReportes } from './reportes';
 import { rutasUsuarios } from './usuarios';
-import { exigirRol } from '../middlewares/autenticacion';
 
 export const rutas = Router();
 
@@ -28,19 +30,24 @@ rutas.use('/auth', limitadorAutenticacion, rutasAuth);
 // Tienda pública
 rutas.use('/catalogo', rutasCatalogo);
 
+// Carrito: invitados (cabecera X-Carrito-Token) y clientes con sesión
+rutas.use('/carrito', rutasCarrito);
+
 // Cliente
 rutas.use('/direcciones', rutasDirecciones);
-// TODO (pendiente): carrito, checkout y pedidos del cliente
+rutas.use('/checkout', rutasCheckout);
+
+// Pedidos: cliente (los suyos) y personal (todos); cada ruta define quién puede usarla
+rutas.use('/pedidos', rutasPedidos);
 
 // Operador y Administrador
-rutas.use('/inventario',exigirRol('Administrador'), rutasInventario);
-// TODO (pendiente): pedidos del personal (listar, avanzar estado, devoluciones)
+rutas.use('/inventario', rutasInventario);
 
 // Administrador
-rutas.use('/usuarios' ,exigirRol('Administrador'), rutasUsuarios);
-rutas.use('/categorias' ,exigirRol('Administrador'), rutasCategorias);
-rutas.use('/productos' ,exigirRol('Administrador'), rutasProductos);
-rutas.use('/variantes' ,exigirRol('Administrador'), rutasVariantes);
-rutas.use('/cupones' ,exigirRol('Administrador'), rutasCupones);
-rutas.use('/reportes' ,exigirRol('Administrador'), rutasReportes);
-rutas.use('/bitacora' ,exigirRol('Administrador'), rutasBitacora);
+rutas.use('/usuarios', rutasUsuarios);
+rutas.use('/categorias', rutasCategorias);
+rutas.use('/productos', rutasProductos);
+rutas.use('/variantes', rutasVariantes);
+rutas.use('/cupones', rutasCupones);
+rutas.use('/reportes', rutasReportes);
+rutas.use('/bitacora', rutasBitacora);
