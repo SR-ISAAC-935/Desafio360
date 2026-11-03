@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { abandonados, porCategoria, resumen, topProductos, ventas } from '../controladores/reportes.controlador';
+import { abandonados, porCategoria, resumen, topProductos, ventas } from '../Controllers/reportes.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 export const rutasReportes = Router();
