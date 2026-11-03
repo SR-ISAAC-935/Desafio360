@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { buscar, categorias, detalle } from '../controladores/catalogo.controlador';
+import { buscar, categorias, detalle } from '../Controllers/catalogo.controlador';
 
 export const rutasCatalogo = Router();
 

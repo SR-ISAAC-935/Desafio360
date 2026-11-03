@@ -32,3 +32,7 @@ export async function verificar(_req: Request, res: Response): Promise<void> {
   const diferencias = await servicio.verificarKardex();
   res.json({ coincide: diferencias.length === 0, diferencias });
 }
+
+export async function liberarReservas(_req: Request, res: Response): Promise<void> {
+  res.json(await servicio.liberarReservasVencidas());
+}

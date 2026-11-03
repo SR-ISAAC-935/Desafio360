@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { actualizar, crear, listar } from '../controladores/categorias.controlador';
+import { actualizar, crear, listar } from '../Controllers/categorias.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 export const rutasCategorias = Router();

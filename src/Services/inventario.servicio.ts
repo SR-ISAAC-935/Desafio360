@@ -53,3 +53,10 @@ export async function verificarKardex(): Promise<Fila[]> {
   const resultado = await ejecutarSP('SP_Inventario_VerificarKardex');
   return resultado.filas<Fila>();
 }
+
+/** Mantenimiento: marca como vencidas las reservas que pasaron de 15 minutos. La disponibilidad ya las ignora sola. */
+export async function liberarReservasVencidas(): Promise<{ reservasLiberadas: number }> {
+  const resultado = await ejecutarSP('SP_Inventario_LiberarReservasVencidas');
+  const fila = resultado.primera<{ ReservasLiberadas: number }>();
+  return { reservasLiberadas: fila?.ReservasLiberadas ?? 0 };
+}

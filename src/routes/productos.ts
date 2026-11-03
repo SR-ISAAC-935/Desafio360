@@ -6,7 +6,7 @@ import {
   crear,
   crearVariante,
   detalle,
-} from '../controladores/productos.controlador';
+} from '../Controllers/productos.controlador';
 import { autenticar, exigirRol } from '../middlewares/autenticacion';
 
 // /api/productos
