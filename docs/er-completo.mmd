@@ -1,0 +1,238 @@
+erDiagram
+    Roles ||--o{ Usuarios : "IDRol"
+    Usuarios ||--o{ RefreshTokens : "IDUsuario"
+    RefreshTokens |o--o{ RefreshTokens : "IDTokenReemplazo"
+    Categorias ||--o{ Productos : "IDCategoria"
+    Productos ||--o{ VariantesProducto : "IDProducto"
+    VariantesProducto ||--o{ MovimientosInventario : "IDVariante"
+    Usuarios ||--o{ MovimientosInventario : "IDUsuario"
+    Usuarios ||--o{ Direcciones : "IDUsuario"
+    Categorias |o--o{ Cupones : "IDCategoria"
+    Usuarios |o--o{ Carritos : "IDUsuario"
+    Cupones |o--o{ Carritos : "IDCupon"
+    Carritos ||--o{ CarritoDetalle : "IDCarrito"
+    VariantesProducto ||--o{ CarritoDetalle : "IDVariante"
+    Usuarios ||--o{ Pedidos : "IDUsuario"
+    Direcciones ||--o{ Pedidos : "IDDireccion"
+    EstadosPedido ||--o{ Pedidos : "IDEstadoPedido"
+    Cupones |o--o{ Pedidos : "IDCupon"
+    Pedidos ||--o{ PedidoDetalle : "IDPedido"
+    VariantesProducto ||--o{ PedidoDetalle : "IDVariante"
+    Cupones ||--o{ UsosCupon : "IDCupon"
+    Usuarios ||--o{ UsosCupon : "IDUsuario"
+    Pedidos ||--o{ UsosCupon : "IDPedido"
+    Carritos ||--o{ ReservasExistencia : "IDCarrito"
+    VariantesProducto ||--o{ ReservasExistencia : "IDVariante"
+    Pedidos |o--o{ ReservasExistencia : "IDPedido"
+    EstadosPedido ||--o{ TransicionesEstadoPedido : "IDEstadoOrigen"
+    EstadosPedido ||--o{ TransicionesEstadoPedido : "IDEstadoDestino"
+    Pedidos ||--o{ HistorialEstadosPedido : "IDPedido"
+    EstadosPedido |o--o{ HistorialEstadosPedido : "IDEstadoAnterior"
+    EstadosPedido ||--o{ HistorialEstadosPedido : "IDEstadoNuevo"
+    Usuarios ||--o{ HistorialEstadosPedido : "IDUsuario"
+    Pedidos ||--o{ Pagos : "IDPedido"
+    Pedidos ||--o{ Devoluciones : "IDPedido"
+    Usuarios ||--o{ Devoluciones : "IDUsuario"
+    Devoluciones ||--o{ DevolucionDetalle : "IDDevolucion"
+    PedidoDetalle ||--o{ DevolucionDetalle : "IDPedidoDetalle"
+    Usuarios ||--o{ Bitacora : "IDUsuario"
+
+    Roles {
+        int IDRol PK
+        nvarchar NombreRol
+    }
+    Usuarios {
+        int IDUsuario PK
+        nvarchar Email
+        nvarchar NombreCompleto
+        varchar PasswordHash
+        int IDRol FK
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    RefreshTokens {
+        int IDToken PK
+        int IDUsuario FK
+        char TokenHash
+        datetime2 FechaCreacion
+        datetime2 FechaExpiracion
+        datetime2 FechaRevocacion
+        int IDTokenReemplazo FK
+        uniqueidentifier DispositivoID
+        varchar DireccionIP
+    }
+    Categorias {
+        int IDCategoria PK
+        nvarchar NombreCategoria
+        nvarchar Descripcion
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Productos {
+        int IDProducto PK
+        nvarchar NombreProducto
+        int IDCategoria FK
+        nvarchar Descripcion
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    VariantesProducto {
+        int IDVariante PK
+        int IDProducto FK
+        varchar SKU
+        nvarchar Talla
+        nvarchar Color
+        decimal Precio
+        int ExistenciaFisica
+        nvarchar ImagenUrl
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    MovimientosInventario {
+        int IDMovimiento PK
+        int IDVariante FK
+        int IDUsuario FK
+        varchar TipoMovimiento
+        int Cantidad
+        int ExistenciaResultante
+        nvarchar Motivo
+        datetime2 FechaMovimiento
+    }
+    Direcciones {
+        int IDDireccion PK
+        int IDUsuario FK
+        nvarchar Direccion
+        nvarchar Zona
+        nvarchar Municipio
+        nvarchar Departamento
+        nvarchar Referencia
+        varchar CodigoPostal
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Cupones {
+        int IDCupon PK
+        varchar Codigo
+        nvarchar Descripcion
+        varchar Tipo
+        decimal Valor
+        datetime2 FechaInicio
+        datetime2 FechaFin
+        decimal MontoMinimo
+        int LimiteUsosTotal
+        int UsosActuales
+        int LimiteUsosPorCliente
+        int IDCategoria FK
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Carritos {
+        int IDCarrito PK
+        int IDUsuario FK
+        uniqueidentifier TokenInvitado
+        int IDCupon FK
+        varchar Estado
+        datetime2 FechaCreacion
+        datetime2 FechaUltimaActividad
+    }
+    CarritoDetalle {
+        int IDCarritoDetalle PK
+        int IDCarrito FK
+        int IDVariante FK
+        int Cantidad
+        datetime2 FechaAgregado
+    }
+    EstadosPedido {
+        int IDEstadoPedido PK
+        nvarchar NombreEstado
+    }
+    Pedidos {
+        int IDPedido PK
+        int IDUsuario FK
+        int IDDireccion FK
+        int IDEstadoPedido FK
+        int IDCupon FK
+        decimal Subtotal
+        decimal Descuento
+        decimal Total
+        decimal MontoIVA
+        varchar LlaveIdempotencia
+        datetime2 FechaPedido
+        rowversion Version
+    }
+    PedidoDetalle {
+        int IDPedidoDetalle PK
+        int IDPedido FK
+        int IDVariante FK
+        int Cantidad
+        decimal PrecioUnitario
+        decimal DescuentoLinea
+        decimal TotalLinea
+        int CantidadDevuelta
+    }
+    UsosCupon {
+        int IDUsoCupon PK
+        int IDCupon FK
+        int IDUsuario FK
+        int IDPedido FK
+        datetime2 FechaUso
+    }
+    ReservasExistencia {
+        int IDReserva PK
+        int IDCarrito FK
+        int IDVariante FK
+        int Cantidad
+        varchar Estado
+        datetime2 FechaCreacion
+        datetime2 FechaVencimiento
+        int IDPedido FK
+    }
+    TransicionesEstadoPedido {
+        int IDEstadoOrigen PK,FK
+        int IDEstadoDestino PK,FK
+    }
+    HistorialEstadosPedido {
+        int IDHistorial PK
+        int IDPedido FK
+        int IDEstadoAnterior FK
+        int IDEstadoNuevo FK
+        int IDUsuario FK
+        datetime2 FechaCambio
+        nvarchar Comentario
+    }
+    Pagos {
+        int IDPago PK
+        int IDPedido FK
+        decimal Monto
+        varchar Metodo
+        varchar Estado
+        varchar Referencia
+        varchar LlaveIdempotencia
+        datetime2 FechaPago
+    }
+    Devoluciones {
+        int IDDevolucion PK
+        int IDPedido FK
+        int IDUsuario FK
+        varchar Tipo
+        nvarchar Motivo
+        decimal MontoReembolso
+        datetime2 FechaDevolucion
+    }
+    DevolucionDetalle {
+        int IDDevolucionDetalle PK
+        int IDDevolucion FK
+        int IDPedidoDetalle FK
+        int Cantidad
+    }
+    Bitacora {
+        bigint IDBitacora PK
+        int IDUsuario FK
+        datetime2 FechaHora
+        varchar Modulo
+        varchar Entidad
+        varchar IDEntidad
+        varchar Accion
+        nvarchar ValorAnterior
+        nvarchar ValorNuevo
+    }

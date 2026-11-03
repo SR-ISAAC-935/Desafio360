@@ -1,0 +1,82 @@
+erDiagram
+    Roles ||--o{ Usuarios : "IDRol"
+    Usuarios ||--o{ RefreshTokens : "IDUsuario"
+    RefreshTokens |o--o{ RefreshTokens : "IDTokenReemplazo"
+    Categorias ||--o{ Productos : "IDCategoria"
+    Productos ||--o{ VariantesProducto : "IDProducto"
+    VariantesProducto ||--o{ MovimientosInventario : "IDVariante"
+    Usuarios ||--o{ MovimientosInventario : "IDUsuario"
+    Usuarios ||--o{ Bitacora : "IDUsuario"
+
+    Roles {
+        int IDRol PK
+        nvarchar NombreRol
+    }
+    Usuarios {
+        int IDUsuario PK
+        nvarchar Email
+        nvarchar NombreCompleto
+        varchar PasswordHash
+        int IDRol FK
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    RefreshTokens {
+        int IDToken PK
+        int IDUsuario FK
+        char TokenHash
+        datetime2 FechaCreacion
+        datetime2 FechaExpiracion
+        datetime2 FechaRevocacion
+        int IDTokenReemplazo FK
+        uniqueidentifier DispositivoID
+        varchar DireccionIP
+    }
+    Categorias {
+        int IDCategoria PK
+        nvarchar NombreCategoria
+        nvarchar Descripcion
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Productos {
+        int IDProducto PK
+        nvarchar NombreProducto
+        int IDCategoria FK
+        nvarchar Descripcion
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    VariantesProducto {
+        int IDVariante PK
+        int IDProducto FK
+        varchar SKU
+        nvarchar Talla
+        nvarchar Color
+        decimal Precio
+        int ExistenciaFisica
+        nvarchar ImagenUrl
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    MovimientosInventario {
+        int IDMovimiento PK
+        int IDVariante FK
+        int IDUsuario FK
+        varchar TipoMovimiento
+        int Cantidad
+        int ExistenciaResultante
+        nvarchar Motivo
+        datetime2 FechaMovimiento
+    }
+    Bitacora {
+        bigint IDBitacora PK
+        int IDUsuario FK
+        datetime2 FechaHora
+        varchar Modulo
+        varchar Entidad
+        varchar IDEntidad
+        varchar Accion
+        nvarchar ValorAnterior
+        nvarchar ValorNuevo
+    }

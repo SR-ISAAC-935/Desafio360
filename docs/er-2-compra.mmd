@@ -1,0 +1,79 @@
+erDiagram
+    Usuarios ||--o{ Direcciones : "IDUsuario"
+    Categorias |o--o{ Cupones : "IDCategoria"
+    Usuarios |o--o{ Carritos : "IDUsuario"
+    Cupones |o--o{ Carritos : "IDCupon"
+    Carritos ||--o{ CarritoDetalle : "IDCarrito"
+    VariantesProducto ||--o{ CarritoDetalle : "IDVariante"
+    Direcciones ||--o{ Pedidos : "IDDireccion"
+    Cupones |o--o{ Pedidos : "IDCupon"
+    Carritos ||--o{ ReservasExistencia : "IDCarrito"
+    VariantesProducto ||--o{ ReservasExistencia : "IDVariante"
+    Pedidos |o--o{ ReservasExistencia : "IDPedido"
+
+    Usuarios {
+        int IDUsuario PK
+    }
+    Categorias {
+        int IDCategoria PK
+    }
+    VariantesProducto {
+        int IDVariante PK
+    }
+    Direcciones {
+        int IDDireccion PK
+        int IDUsuario FK
+        nvarchar Direccion
+        nvarchar Zona
+        nvarchar Municipio
+        nvarchar Departamento
+        nvarchar Referencia
+        varchar CodigoPostal
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Cupones {
+        int IDCupon PK
+        varchar Codigo
+        nvarchar Descripcion
+        varchar Tipo
+        decimal Valor
+        datetime2 FechaInicio
+        datetime2 FechaFin
+        decimal MontoMinimo
+        int LimiteUsosTotal
+        int UsosActuales
+        int LimiteUsosPorCliente
+        int IDCategoria FK
+        bit Activo
+        datetime2 FechaCreacion
+    }
+    Carritos {
+        int IDCarrito PK
+        int IDUsuario FK
+        uniqueidentifier TokenInvitado
+        int IDCupon FK
+        varchar Estado
+        datetime2 FechaCreacion
+        datetime2 FechaUltimaActividad
+    }
+    CarritoDetalle {
+        int IDCarritoDetalle PK
+        int IDCarrito FK
+        int IDVariante FK
+        int Cantidad
+        datetime2 FechaAgregado
+    }
+    Pedidos {
+        int IDPedido PK
+    }
+    ReservasExistencia {
+        int IDReserva PK
+        int IDCarrito FK
+        int IDVariante FK
+        int Cantidad
+        varchar Estado
+        datetime2 FechaCreacion
+        datetime2 FechaVencimiento
+        int IDPedido FK
+    }
