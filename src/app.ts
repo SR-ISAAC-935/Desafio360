@@ -6,18 +6,24 @@ import { env } from './config/env';
 import { limitadorGeneral } from './middlewares/limitadores';
 import { manejadorErrores, rutaNoEncontrada } from './middlewares/errores';
 import { rutas } from './routes';
-
+import cookieParser from 'cookie-parser';
 // La app se crea aquí y se arranca en server.ts: así se puede importar en pruebas sin abrir un puerto.
 export const app = express();
 
+app.use(cookieParser());
 app.use('/api', rutasDocs);
 app.disable('x-powered-by');
 app.use(helmet());
 app.use(
   cors({
-    origin: env.CORS_ORIGINS, // lista explícita de orígenes, nunca "*"
+    origin: env.CORS_ORIGINS,
+    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization','x-carrito-token'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-carrito-token'
+    ],
     maxAge: 600,
   }),
 );

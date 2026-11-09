@@ -4,7 +4,7 @@ import { ejecutarSP } from '../../db/ejecutarSP';
 import { P } from '../../db/parametros';
 import { AppError } from '../../errors/AppError';
 import type { InicioSesionDto, RegistroDto } from '../../schemas/auth.schemas';
-
+import jwt from 'jsonwebtoken';
 import { createHash, randomBytes } from 'node:crypto';
 interface UsuarioRow {
   IDUsuario: number; Email: string; NombreCompleto: string; PasswordHash: string;
@@ -15,7 +15,7 @@ export interface UsuarioRegistrado { IDUsuario: number; Email: string; NombreCom
 
 // Si el correo no existe se compara contra este hash, para que el tiempo de respuesta no delate correos válidos.
 const HASH_DE_RELLENO = bcrypt.hashSync('contrasena-que-nadie-usa', env.BCRYPT_ROUNDS);
-
+const ALGORITMO = 'HS256' as const;
 export async function registrarUsuario(datos: RegistroDto): Promise<UsuarioRegistrado> {
   const hash = await bcrypt.hash(datos.password, env.BCRYPT_ROUNDS);
   const resultado = await ejecutarSP('SP_Auth_RegistrarCliente', [
@@ -83,4 +83,11 @@ export function crearRefreshToken(): RefreshTokenNuevo {
     hash: hashearToken(token),
     expiraEn: new Date(Date.now() + env.REFRESH_TOKEN_DAYS * 24 * 60 * 60 * 1000),
   };
+}
+export function crearAccessToken(usuario: { IDUsuario: number; NombreRol: string }): string {
+  return jwt.sign({ rol: usuario.NombreRol }, env.JWT_SECRET, {
+    subject: String(usuario.IDUsuario),
+    algorithm: ALGORITMO,
+    expiresIn: env.JWT_ACCESS_MINUTES * 60,
+  });
 }

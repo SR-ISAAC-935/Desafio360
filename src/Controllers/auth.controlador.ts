@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { inicioSesionSchema, refreshTokenSchema, registroSchema } from '../schemas/auth.schemas';
 import * as servicio from '../Services/auth.servicio';
 import { usuarioDe } from '../utils/solicitud';
+import { refreshCookieOptions } from '../config/cookies';
 
 export async function registro(req: Request, res: Response): Promise<void> {
   const usuario = await servicio.registrarUsuario(registroSchema.parse(req.body));
@@ -11,6 +12,13 @@ export async function registro(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response): Promise<void> {
   const sesion = await servicio.iniciarSesion(inicioSesionSchema.parse(req.body), req.ip);
   res.json(sesion);
+}
+export async function logins(req: Request, res: Response): Promise<void> {
+
+  const sesion = await servicio.iniciarSesion(inicioSesionSchema.parse(req.body), req.ip);
+  const {refreshToken,...datosSesion}= sesion
+  res.cookie('refreshtoken', refreshToken, refreshCookieOptions);
+  res.json(datosSesion);
 }
 
 export async function renovar(req: Request, res: Response): Promise<void> {

@@ -1,7 +1,27 @@
 import { z } from 'zod';
+import { env } from '../config/env';
 import { idEntero, monto } from './comunes.schemas';
 
 const texto = (max: number) => z.string().trim().min(1).max(max);
+
+/**
+ * URL de la imagen de una variante. Solo https (se rechaza javascript:, data:, http:, etc.).
+ * Si Cloudinary está configurado, además debe ser una imagen de NUESTRA cuenta: res.cloudinary.com/<cloud_name>/...
+ * así el administrador no puede enlazar imágenes de sitios ajenos por error.
+ */
+export const imagenUrlSchema = z
+  .string()
+  .trim()
+  .max(255)
+  .url('La imagen debe ser una URL válida.')
+  .refine((valor) => URL.canParse(valor) && new URL(valor).protocol === 'https:', 'La URL de la imagen debe usar https.')
+  .refine((valor) => {
+    const cuenta = env.CLOUDINARY_CLOUD_NAME;
+    // Si no es una URL válida, el chequeo anterior ya la rechaza: aquí no se vuelve a analizar (new URL lanzaría una excepción).
+    if (cuenta === undefined || !URL.canParse(valor)) return true;
+    const url = new URL(valor);
+    return url.hostname === 'res.cloudinary.com' && url.pathname.startsWith(`/${cuenta}/`);
+  }, 'La imagen debe subirse a Cloudinary con el endpoint /imagenes/firma.');
 
 /** Una variante nueva: SKU, atributos, precio (con IVA incluido) y existencia inicial. */
 export const varianteNuevaSchema = z.strictObject({
@@ -10,7 +30,7 @@ export const varianteNuevaSchema = z.strictObject({
   color: texto(30).nullish(),
   precio: monto,
   existenciaInicial: z.number().int().min(0).max(1_000_000),
-  imagenUrl: z.string().trim().url().max(255).nullish(),
+  imagenUrl: imagenUrlSchema.nullish(),
 });
 
 export const crearProductoSchema = z.strictObject({
@@ -37,7 +57,7 @@ export const actualizarProductoSchema = z.strictObject({
 export const actualizarVarianteSchema = z.strictObject({
   talla: texto(30).nullish(),
   color: texto(30).nullish(),
-  imagenUrl: z.string().trim().url().max(255).nullish(),
+  imagenUrl: imagenUrlSchema.nullish(),
   activo: z.boolean(),
 });
 

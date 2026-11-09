@@ -12,6 +12,13 @@ const booleano = z
   .default('false')
   .transform((valor) => valor === 'true');
 
+/** Variable opcional: un valor vacío en el .env (por ejemplo "CLOUDINARY_API_KEY=") cuenta como no configurada. */
+const opcional = z
+  .string()
+  .trim()
+  .optional()
+  .transform((valor) => (valor === undefined || valor === '' ? undefined : valor));
+
 const esquema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
@@ -42,6 +49,11 @@ const esquema = z.object({
 
   RATE_LIMIT_GENERAL_MAX: z.coerce.number().int().min(10).default(300),
   RATE_LIMIT_AUTH_MAX: z.coerce.number().int().min(1).default(20),
+
+  // Imágenes de productos en Cloudinary. Son opcionales: sin ellas la API funciona igual, pero /api/imagenes/firma responde 503.
+  CLOUDINARY_CLOUD_NAME: opcional,
+  CLOUDINARY_API_KEY: opcional,
+  CLOUDINARY_API_SECRET: opcional,
 });
 
 const resultado = esquema.safeParse(process.env);
